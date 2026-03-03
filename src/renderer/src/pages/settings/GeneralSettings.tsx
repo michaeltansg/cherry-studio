@@ -10,7 +10,6 @@ import i18n from '@renderer/i18n'
 import type { RootState } from '@renderer/store'
 import { useAppDispatch } from '@renderer/store'
 import {
-  setEnableDataCollection,
   setEnableSpellCheck,
   setLanguage,
   setNotificationSettings,
@@ -61,7 +60,6 @@ const GeneralSettings: FC = () => {
     trayOnClose,
     tray,
     proxyMode: storeProxyMode,
-    enableDataCollection,
     enableSpellCheck,
     disableHardwareAcceleration,
     setDisableHardwareAcceleration
@@ -338,20 +336,6 @@ const GeneralSettings: FC = () => {
         <SettingRow>
           <SettingRowTitle>{t('settings.tray.onclose')}</SettingRowTitle>
           <Switch checked={trayOnClose} onChange={(checked) => updateTrayOnClose(checked)} />
-        </SettingRow>
-      </SettingGroup>
-      <SettingGroup theme={theme}>
-        <SettingTitle>{t('settings.privacy.title')}</SettingTitle>
-        <SettingDivider />
-        <SettingRow>
-          <SettingRowTitle>{t('settings.privacy.enable_privacy_mode')}</SettingRowTitle>
-          <Switch
-            value={enableDataCollection}
-            onChange={(v) => {
-              dispatch(setEnableDataCollection(v))
-              window.api.config.set('enableDataCollection', v)
-            }}
-          />
         </SettingRow>
       </SettingGroup>
       <SettingGroup theme={theme}>

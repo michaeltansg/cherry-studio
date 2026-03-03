@@ -4897,10 +4897,6 @@
         "title": "詳細度"
       }
     },
-    "privacy": {
-      "enable_privacy_mode": "匿名エラーレポートとデータ統計の送信",
-      "title": "プライバシー設定"
-    },
     "provider": {
       "add": {
         "name": {

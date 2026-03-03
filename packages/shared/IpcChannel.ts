@@ -427,6 +427,4 @@ export enum IpcChannel {
   OpenClaw_CheckUpdate = 'openclaw:check-update',
   OpenClaw_PerformUpdate = 'openclaw:perform-update',
 
-  // Analytics
-  Analytics_TrackTokenUsage = 'analytics:track-token-usage'
 }

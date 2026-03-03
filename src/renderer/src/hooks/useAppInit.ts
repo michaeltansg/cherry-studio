@@ -42,7 +42,6 @@ export function useAppInit() {
     autoCheckUpdate,
     proxyMode,
     customCss,
-    enableDataCollection
   } = useSettings()
   const { isLeftNavbar } = useNavbarPosition()
   const { minappShow } = useRuntime()
@@ -263,10 +262,6 @@ export function useAppInit() {
 
     return () => removeListeners.forEach((removeListener) => removeListener())
   }, [dispatch, t])
-
-  useEffect(() => {
-    // TODO: init data collection
-  }, [enableDataCollection])
 
   // Update memory service configuration when it changes
   useEffect(() => {

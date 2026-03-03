@@ -4897,10 +4897,6 @@
         "title": "niveau de détail"
       }
     },
-    "privacy": {
-      "enable_privacy_mode": "Отправлять анонимные сообщения об ошибках и статистику",
-      "title": "Настройки конфиденциальности"
-    },
     "provider": {
       "add": {
         "name": {
