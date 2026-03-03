@@ -9,7 +9,7 @@ import type {
   TranslateLanguage,
   TranslateLanguageCode
 } from '@renderer/types'
-import type { BlockCompleteChunk, Chunk } from '@renderer/types/chunk'
+import type { Chunk } from '@renderer/types/chunk'
 import { ChunkType } from '@renderer/types/chunk'
 import { uuid } from '@renderer/utils'
 import { readyToAbort } from '@renderer/utils/abortController'
@@ -52,14 +52,13 @@ export const translateText = async (
 
   let translatedText = ''
   let completed = false
-  const model = assistant.model
   const onChunk = (chunk: Chunk) => {
     if (chunk.type === ChunkType.TEXT_DELTA) {
       translatedText = chunk.text
     } else if (chunk.type === ChunkType.TEXT_COMPLETE) {
       completed = true
     } else if (chunk.type === ChunkType.BLOCK_COMPLETE) {
-      const usage = (chunk as BlockCompleteChunk).response?.usage
+      // usage available via (chunk as BlockCompleteChunk).response?.usage
     } else if (chunk.type === ChunkType.ERROR) {
       error = chunk.error
       if (isAbortError(chunk.error)) {
