@@ -427,6 +427,4 @@ export enum IpcChannel {
   OpenClaw_SyncConfig = 'openclaw:sync-config',
   OpenClaw_GetChannels = 'openclaw:get-channels',
 
-  // Analytics
-  Analytics_TrackTokenUsage = 'analytics:track-token-usage'
 }

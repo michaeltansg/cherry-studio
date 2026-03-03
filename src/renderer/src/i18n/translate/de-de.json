@@ -4825,10 +4825,6 @@
         "title": "Detailgrad"
       }
     },
-    "privacy": {
-      "enable_privacy_mode": "Fehlerberichte und Statistiken anonym senden",
-      "title": "Datenschutzeinstellungen"
-    },
     "provider": {
       "add": {
         "name": {

@@ -17,7 +17,6 @@ import { type Chunk, ChunkType } from '@renderer/types/chunk'
 import type { Message, ResponseError } from '@renderer/types/newMessage'
 import { removeSpecialCharactersForTopicName, uuid } from '@renderer/utils'
 import { abortCompletion, readyToAbort } from '@renderer/utils/abortController'
-import { trackTokenUsage } from '@renderer/utils/analytics'
 import { isToolUseModeFunction } from '@renderer/utils/assistant'
 import { getErrorMessage, isAbortError } from '@renderer/utils/error'
 import { purifyMarkdownImages } from '@renderer/utils/markdown'
@@ -396,7 +395,6 @@ export async function fetchMessagesSummary({
       callType: 'summary'
     })
 
-    trackTokenUsage({ usage, model })
 
     const text = getText()
     const result = removeSpecialCharactersForTopicName(text)
@@ -470,7 +468,6 @@ export async function fetchNoteSummary({ content, assistant }: { content: string
       callType: 'summary'
     })
 
-    trackTokenUsage({ usage, model })
 
     const text = getText()
     return removeSpecialCharactersForTopicName(text) || null
@@ -566,7 +563,6 @@ export async function fetchGenerate({
       }
     )
 
-    trackTokenUsage({ usage: result.usage, model })
 
     return result.getText() || ''
   } catch (error: any) {

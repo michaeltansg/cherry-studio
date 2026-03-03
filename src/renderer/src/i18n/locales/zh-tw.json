@@ -4825,10 +4825,6 @@
         "title": "詳細程度"
       }
     },
-    "privacy": {
-      "enable_privacy_mode": "匿名傳送錯誤報告和資料統計",
-      "title": "隱私設定"
-    },
     "provider": {
       "add": {
         "name": {

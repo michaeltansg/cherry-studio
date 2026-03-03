@@ -11,7 +11,6 @@ import type { Assistant } from '@renderer/types'
 import type { PlaceholderMessageBlock, Response, ThinkingMessageBlock } from '@renderer/types/newMessage'
 import { AssistantMessageStatus, MessageBlockStatus, MessageBlockType } from '@renderer/types/newMessage'
 import { uuid } from '@renderer/utils'
-import { trackTokenUsage } from '@renderer/utils/analytics'
 import { isAbortError, serializeError } from '@renderer/utils/error'
 import { createBaseMessageBlock, createErrorBlock } from '@renderer/utils/messageUtils/create'
 import { findAllBlocks, getMainTextContent } from '@renderer/utils/messageUtils/find'
@@ -256,11 +255,6 @@ export const createBaseCallbacks = (deps: BaseCallbacksDependencies) => {
         })
       )
       await saveUpdatesToDB(assistantMsgId, topicId, messageUpdates, [])
-
-      // Track token usage analytics
-      if (status === 'success') {
-        trackTokenUsage({ usage: response?.usage, model: assistant?.model })
-      }
 
       EventEmitter.emit(EVENT_NAMES.MESSAGE_COMPLETE, { id: assistantMsgId, topicId, status })
       logger.debug('onComplete finished')

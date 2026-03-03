@@ -194,8 +194,6 @@ export interface SettingsState {
   minappsOpenLinkExternal: boolean
   /** Mini app region filter: 'auto' (detect from IP), 'CN', or 'Global' */
   minAppRegion: MinAppRegionFilter
-  // 隐私设置
-  enableDataCollection: boolean
   enableSpellCheck: boolean
   spellCheckLanguages: string[]
   enableQuickPanelTriggers: boolean
@@ -380,7 +378,6 @@ export const initialState: SettingsState = {
   showOpenedMinappsInSidebar: true,
   minappsOpenLinkExternal: false,
   minAppRegion: 'auto',
-  enableDataCollection: false,
   enableSpellCheck: false,
   spellCheckLanguages: [],
   enableQuickPanelTriggers: false,
@@ -805,9 +802,6 @@ const settingsSlice = createSlice({
     setMinAppRegion: (state, action: PayloadAction<MinAppRegionFilter>) => {
       state.minAppRegion = action.payload
     },
-    setEnableDataCollection: (state, action: PayloadAction<boolean>) => {
-      state.enableDataCollection = action.payload
-    },
     setEnableSpellCheck: (state, action: PayloadAction<boolean>) => {
       state.enableSpellCheck = action.payload
     },
@@ -1005,7 +999,6 @@ export const {
   setShowOpenedMinappsInSidebar,
   setMinappsOpenLinkExternal,
   setMinAppRegion,
-  setEnableDataCollection,
   setEnableSpellCheck,
   setSpellCheckLanguages,
   setExportMenuOptions,
