@@ -4,7 +4,6 @@ import { loggerService } from '@logger'
 import { isGemini3Model, isQwen35Model, isSupportedThinkingTokenQwenModel } from '@renderer/config/models'
 import { getEnableDeveloperMode } from '@renderer/hooks/useSettings'
 import type { Assistant, Model, Provider } from '@renderer/types'
-import { SystemProviderIds } from '@renderer/types'
 import { isOllamaProvider, isSupportEnableThinkingProvider } from '@renderer/utils/provider'
 
 import type { AiSdkMiddlewareConfig } from '../types/middlewareConfig'
@@ -76,7 +75,7 @@ export function buildPlugins({ provider, model, config }: BuildPluginsContext): 
   }
 
   // 0.3 OpenRouter reasoning redaction
-  if (provider.id === SystemProviderIds.openrouter) {
+  if (provider.id === 'openrouter') {
     plugins.push(createOpenrouterReasoningPlugin())
   }
 

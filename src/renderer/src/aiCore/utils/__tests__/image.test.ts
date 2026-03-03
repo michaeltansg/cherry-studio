@@ -4,7 +4,6 @@
  */
 
 import type { Model, Provider } from '@renderer/types'
-import { SystemProviderIds } from '@renderer/types'
 import { describe, expect, it } from 'vitest'
 
 import { buildGeminiGenerateImageParams, isOpenRouterGeminiGenerateImageModel } from '../image'
@@ -30,7 +29,7 @@ describe('image utils', () => {
 
   describe('isOpenRouterGeminiGenerateImageModel', () => {
     const mockOpenRouterProvider: Provider = {
-      id: SystemProviderIds.openrouter,
+      id: 'openrouter',
       name: 'OpenRouter',
       apiKey: 'test-key',
       apiHost: 'https://openrouter.ai/api/v1',
@@ -38,29 +37,30 @@ describe('image utils', () => {
     } as Provider
 
     const mockOtherProvider: Provider = {
-      id: SystemProviderIds.openai,
+      id: 'openai',
       name: 'OpenAI',
       apiKey: 'test-key',
       apiHost: 'https://api.openai.com/v1',
       isSystem: true
     } as Provider
 
-    it('should return true for OpenRouter Gemini 2.5 Flash Image model', () => {
+    it('should return false for OpenRouter Gemini 2.5 Flash Image model (openrouter is not a system provider)', () => {
       const model: Model = {
         id: 'google/gemini-2.5-flash-image-preview',
         name: 'Gemini 2.5 Flash Image',
-        provider: SystemProviderIds.openrouter
+        provider: 'openrouter'
       } as Model
 
+      // isSystemProvider returns false for openrouter since only 'codesmart' is a valid SystemProviderId
       const result = isOpenRouterGeminiGenerateImageModel(model, mockOpenRouterProvider)
-      expect(result).toBe(true)
+      expect(result).toBe(false)
     })
 
     it('should return false for non-Gemini model on OpenRouter', () => {
       const model: Model = {
         id: 'openai/gpt-4',
         name: 'GPT-4',
-        provider: SystemProviderIds.openrouter
+        provider: 'openrouter'
       } as Model
 
       const result = isOpenRouterGeminiGenerateImageModel(model, mockOpenRouterProvider)
@@ -71,7 +71,7 @@ describe('image utils', () => {
       const model: Model = {
         id: 'gemini-2.5-flash-image-preview',
         name: 'Gemini 2.5 Flash Image',
-        provider: SystemProviderIds.gemini
+        provider: 'gemini'
       } as Model
 
       const result = isOpenRouterGeminiGenerateImageModel(model, mockOtherProvider)
@@ -82,22 +82,23 @@ describe('image utils', () => {
       const model: Model = {
         id: 'google/gemini-2.5-flash',
         name: 'Gemini 2.5 Flash',
-        provider: SystemProviderIds.openrouter
+        provider: 'openrouter'
       } as Model
 
       const result = isOpenRouterGeminiGenerateImageModel(model, mockOpenRouterProvider)
       expect(result).toBe(false)
     })
 
-    it('should handle model ID with partial match', () => {
+    it('should return false for partial match (openrouter is not a system provider)', () => {
       const model: Model = {
         id: 'google/gemini-2.5-flash-image-generation',
         name: 'Gemini Image Gen',
-        provider: SystemProviderIds.openrouter
+        provider: 'openrouter'
       } as Model
 
+      // isSystemProvider returns false for openrouter since only 'codesmart' is a valid SystemProviderId
       const result = isOpenRouterGeminiGenerateImageModel(model, mockOpenRouterProvider)
-      expect(result).toBe(true)
+      expect(result).toBe(false)
     })
 
     it('should return false for custom provider', () => {

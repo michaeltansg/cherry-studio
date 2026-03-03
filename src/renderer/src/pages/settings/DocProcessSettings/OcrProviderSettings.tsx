@@ -30,7 +30,7 @@ const OcrProviderSettings = ({ provider }: Props) => {
 
   const ProviderSettings = () => {
     if (isBuiltinOcrProvider(provider)) {
-      switch (provider.id) {
+      switch (provider.id as string) {
         case 'tesseract':
           return <OcrTesseractSettings />
         case 'system':

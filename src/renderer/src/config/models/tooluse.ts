@@ -1,5 +1,4 @@
 import type { Model } from '@renderer/types'
-import { isSystemProviderId } from '@renderer/types'
 import { getLowerBaseModelName, isUserSelectedModelType } from '@renderer/utils'
 
 import { isEmbeddingModel, isRerankModel } from './embedding'
@@ -77,13 +76,11 @@ export function isFunctionCallingModel(model?: Model): boolean {
   // 2025/08/26 百炼与火山引擎均不支持 v3.1 函数调用
   // 先默认支持
   if (isDeepSeekHybridInferenceModel(model)) {
-    if (isSystemProviderId(model.provider)) {
-      switch (model.provider) {
-        case 'dashscope':
-        case 'doubao':
-          // case 'nvidia': // nvidia api 太烂了 测不了能不能用 先假设能用
-          return false
-      }
+    switch (model.provider) {
+      case 'dashscope':
+      case 'doubao':
+        // case 'nvidia': // nvidia api 太烂了 测不了能不能用 先假设能用
+        return false
     }
     return true
   }

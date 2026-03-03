@@ -24,18 +24,15 @@ import {
   type Assistant,
   type GroqServiceTier,
   GroqServiceTiers,
-  type GroqSystemProvider,
   isGroqServiceTier,
   isGroqSystemProvider,
   isOpenAIServiceTier,
   isTranslateAssistant,
   type Model,
-  type NotGroqProvider,
   type OpenAIServiceTier,
   OpenAIServiceTiers,
   type Provider,
-  type ServiceTier,
-  SystemProviderIds
+  type ServiceTier
 } from '@renderer/types'
 import { type AiSdkParam, isAiSdkParam, type OpenAIVerbosity } from '@renderer/types/aiCoreTypes'
 import { isSupportServiceTierProvider, isSupportVerbosityProvider } from '@renderer/utils/provider'
@@ -82,8 +79,6 @@ function toGroqServiceTier(model: Model, serviceTier: ServiceTier): GroqServiceT
   }
 }
 
-function getServiceTier<T extends GroqSystemProvider>(model: Model, provider: T): GroqServiceTier
-function getServiceTier<T extends NotGroqProvider>(model: Model, provider: T): OpenAIServiceTier
 function getServiceTier<T extends Provider>(model: Model, provider: T): OpenAIServiceTier | GroqServiceTier {
   const serviceTierSetting = provider.serviceTier
 
@@ -184,7 +179,7 @@ export function buildProviderOptions(
             assistant,
             model,
             capabilities,
-            serviceTier,
+            serviceTier as OpenAIServiceTier,
             textVerbosity
           )
         }
@@ -220,7 +215,7 @@ export function buildProviderOptions(
           model,
           capabilities,
           actualProvider,
-          serviceTier,
+          serviceTier as OpenAIServiceTier,
           textVerbosity
         )
         break
@@ -244,13 +239,24 @@ export function buildProviderOptions(
           providerSpecificOptions = buildBedrockProviderOptions(assistant, model, capabilities)
           break
         case 'huggingface':
-          providerSpecificOptions = buildOpenAIProviderOptions(assistant, model, capabilities, serviceTier)
+          providerSpecificOptions = buildOpenAIProviderOptions(
+            assistant,
+            model,
+            capabilities,
+            serviceTier as OpenAIServiceTier
+          )
           break
-        case SystemProviderIds.ollama:
+        case 'ollama':
           providerSpecificOptions = buildOllamaProviderOptions(assistant, model, capabilities)
           break
-        case SystemProviderIds.gateway:
-          providerSpecificOptions = buildAIGatewayOptions(assistant, model, capabilities, serviceTier, textVerbosity)
+        case 'gateway':
+          providerSpecificOptions = buildAIGatewayOptions(
+            assistant,
+            model,
+            capabilities,
+            serviceTier as OpenAIServiceTier,
+            textVerbosity
+          )
           break
         default:
           // 对于其他 provider，使用通用的构建逻辑
@@ -323,7 +329,7 @@ export function buildProviderOptions(
     } else if (key === rawProviderId && !actualAiSdkProviderIds.includes(rawProviderId)) {
       // Case 2: Key is the current provider (not in actualAiSdkProviderIds, so it's a proxy or special provider)
       // Gateway is special: it needs routing config preserved
-      if (key === SystemProviderIds.gateway) {
+      if (key === 'gateway') {
         // Preserve gateway config for routing
         providerSpecificOptions = {
           ...providerSpecificOptions,

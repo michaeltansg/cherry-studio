@@ -14,8 +14,7 @@ import {
   type KnowledgeBase,
   type KnowledgeBaseParams,
   type KnowledgeReference,
-  type KnowledgeSearchResult,
-  SystemProviderIds
+  type KnowledgeSearchResult
 } from '@renderer/types'
 import type { Chunk } from '@renderer/types/chunk'
 import { ChunkType } from '@renderer/types/chunk'
@@ -59,7 +58,7 @@ export const getKnowledgeBaseParams = (base: KnowledgeBase): KnowledgeBaseParams
     baseURL = baseURL + '/openai'
   } else if (isAzureOpenAIProvider(actualProvider)) {
     baseURL = baseURL + '/v1'
-  } else if (actualProvider.id === SystemProviderIds.ollama) {
+  } else if (actualProvider.id === 'ollama') {
     // LangChain生态不需要/api结尾的URL
     baseURL = baseURL.replace(/\/api$/, '')
   }

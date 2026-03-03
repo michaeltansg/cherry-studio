@@ -15,7 +15,7 @@ import ZhipuProvider from './ZhipuProvider'
 
 export default class WebSearchProviderFactory {
   static create(provider: WebSearchProvider): BaseWebSearchProvider {
-    switch (provider.id) {
+    switch (provider.id as string) {
       case 'zhipu':
         return new ZhipuProvider(provider)
       case 'tavily':

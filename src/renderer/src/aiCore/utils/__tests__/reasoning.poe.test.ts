@@ -1,5 +1,4 @@
 import type { Assistant, Model, ReasoningEffortOption } from '@renderer/types'
-import { SystemProviderIds } from '@renderer/types'
 import { describe, expect, it, vi } from 'vitest'
 
 import { getReasoningEffort } from '../reasoning'
@@ -54,7 +53,7 @@ describe('Poe Provider Reasoning Support', () => {
   const createPoeModel = (id: string): Model => ({
     id,
     name: id,
-    provider: SystemProviderIds.poe,
+    provider: 'poe',
     group: 'poe'
   })
 

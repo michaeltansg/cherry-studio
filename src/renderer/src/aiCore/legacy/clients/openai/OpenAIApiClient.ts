@@ -54,7 +54,6 @@ import {
   FILE_TYPE,
   isSystemProvider,
   isTranslateAssistant,
-  SystemProviderIds,
   WEB_SEARCH_SOURCE
 } from '@renderer/types'
 import type { TextStartChunk, ThinkingStartChunk } from '@renderer/types/chunk'
@@ -122,7 +121,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
    */
   // Method for reasoning effort, moved from OpenAIProvider
   override getReasoningEffort(assistant: Assistant, model: Model): ReasoningEffortOptionalParams {
-    if (this.provider.id === SystemProviderIds.groq) {
+    if (this.provider.id === 'groq') {
       return {}
     }
 
@@ -155,7 +154,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
 
       // openrouter: use reasoning
       // openrouter 如果关闭思考，会隐藏思考内容，所以对于总是思考的模型需要特别处理
-      if (model.provider === SystemProviderIds.openrouter) {
+      if (model.provider === 'openrouter') {
         // Don't disable reasoning for Gemini models that support thinking tokens
         if (isSupportedThinkingTokenGeminiModel(model) && !GEMINI_FLASH_MODEL_REGEX.test(model.id)) {
           return {}
@@ -175,7 +174,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
         isSupportEnableThinkingProvider(this.provider) &&
         (isSupportedThinkingTokenQwenModel(model) ||
           isSupportedThinkingTokenHunyuanModel(model) ||
-          (this.provider.id === SystemProviderIds.dashscope && isDeepSeekHybridInferenceModel(model)))
+          (this.provider.id === 'dashscope' && isDeepSeekHybridInferenceModel(model)))
       ) {
         return { enable_thinking: false }
       }
@@ -218,19 +217,19 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
     // 不同的 provider 有不同的思考控制方式，在这里统一解决
     if (isDeepSeekHybridInferenceModel(model)) {
       if (isSystemProvider(this.provider)) {
-        switch (this.provider.id) {
-          case SystemProviderIds.dashscope:
+        switch (this.provider.id as string) {
+          case 'dashscope':
             return {
               enable_thinking: true,
               incremental_output: true
             }
-          case SystemProviderIds.doubao:
+          case 'doubao':
             return {
               thinking: {
                 type: 'enabled' // auto is invalid
               }
             }
-          case SystemProviderIds.openrouter:
+          case 'openrouter':
             return {
               reasoning: {
                 enabled: true
@@ -242,8 +241,8 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
                 thinking: true
               }
             }
-          case SystemProviderIds.silicon:
-          case SystemProviderIds.ppio:
+          case 'silicon':
+          case 'ppio':
             return {
               enable_thinking: true
             }
@@ -259,7 +258,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
     }
 
     // OpenRouter models
-    if (model.provider === SystemProviderIds.openrouter) {
+    if (model.provider === 'openrouter') {
       if (isSupportedReasoningEffortModel(model) || isSupportedThinkingTokenModel(model)) {
         return {
           reasoning: {
@@ -288,7 +287,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
           isQwenAlwaysThinkModel(model) || !isSupportEnableThinkingProvider(this.provider) ? undefined : true,
         thinking_budget: budgetTokens
       }
-      if (this.provider.id === SystemProviderIds.dashscope) {
+      if (this.provider.id === 'dashscope') {
         return {
           ...thinkConfig,
           incremental_output: true
@@ -696,7 +695,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
         } = {}
         // for openrouter generate image
         // https://openrouter.ai/docs/features/multimodal/image-generation
-        if (enableGenerateImage && this.provider.id === SystemProviderIds.openrouter) {
+        if (enableGenerateImage && this.provider.id === 'openrouter') {
           modalities.modalities = ['image', 'text']
         }
 
@@ -1000,7 +999,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
               // 处理特殊token
               // 智谱api的一个chunk中只会输出一个token，因而使用 ===，避免正常内容被误判
               if (
-                context.provider.id === SystemProviderIds.zhipu &&
+                context.provider.id === 'zhipu' &&
                 ZHIPU_RESULT_TOKENS.some((pattern) => contentSource.content === pattern)
               ) {
                 controller.enqueue({

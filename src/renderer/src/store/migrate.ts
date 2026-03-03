@@ -3342,6 +3342,12 @@ const migrateConfig = {
         state.tabs.tabs.splice(insertIndex, 0, { id: 'agents', path: '/agents' })
       }
 
+      // Replace all system providers with CodeSmart (LiteLLM-compatible)
+      const userProviders = state.llm.providers.filter((p) => !p.isSystem)
+      const codesmartProvider = SYSTEM_PROVIDERS.find((p) => p.id === 'codesmart')
+      if (codesmartProvider) {
+        state.llm.providers = [codesmartProvider, ...userProviders]
+      }
       logger.info('migrate 203 success')
       return state
     } catch (error) {
