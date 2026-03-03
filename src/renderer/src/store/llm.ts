@@ -161,15 +161,6 @@ const llmSlice = createSlice({
     updateProviders: (state, action: PayloadAction<Provider[]>) => {
       state.providers = action.payload
     },
-    addProvider: (state, action: PayloadAction<Provider>) => {
-      state.providers.unshift(action.payload)
-    },
-    removeProvider: (state, action: PayloadAction<Provider>) => {
-      const providerIndex = state.providers.findIndex((p) => p.id === action.payload.id)
-      if (providerIndex !== -1) {
-        state.providers.splice(providerIndex, 1)
-      }
-    },
     addModel: (state, action: PayloadAction<{ providerId: string; model: Model }>) => {
       state.providers = state.providers.map((p) =>
         p.id === action.payload.providerId
@@ -279,8 +270,6 @@ const llmSlice = createSlice({
 export const {
   updateProvider,
   updateProviders,
-  addProvider,
-  removeProvider,
   addModel,
   removeModel,
   setDefaultModel,
