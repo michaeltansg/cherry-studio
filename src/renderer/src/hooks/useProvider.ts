@@ -3,9 +3,7 @@ import { getDefaultProvider } from '@renderer/services/AssistantService'
 import { type RootState, useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   addModel,
-  addProvider,
   removeModel,
-  removeProvider,
   updateModel,
   updateProvider,
   updateProviders
@@ -56,8 +54,6 @@ export function useProviders() {
 
   return {
     providers: providers || [],
-    addProvider: (provider: Provider) => dispatch(addProvider(provider)),
-    removeProvider: (provider: Provider) => dispatch(removeProvider(provider)),
     updateProvider: (updates: Partial<Provider> & { id: string }) => dispatch(updateProvider(updates)),
     updateProviders: (providers: Provider[]) => dispatch(updateProviders(providers))
   }
