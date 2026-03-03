@@ -3,7 +3,7 @@ import { useAllProviders } from '@renderer/hooks/useProvider'
 import { useAppDispatch } from '@renderer/store'
 import { setDefaultPaintingProvider } from '@renderer/store/settings'
 import { updateTab } from '@renderer/store/tabs'
-import type { PaintingProvider, SystemProviderId } from '@renderer/types'
+import type { PaintingProvider } from '@renderer/types'
 import { isNewApiProvider } from '@renderer/utils/provider'
 import type { FC } from 'react'
 import { useEffect, useMemo, useState } from 'react'
@@ -20,7 +20,7 @@ import ZhipuPage from './ZhipuPage'
 
 const logger = loggerService.withContext('PaintingsRoutePage')
 
-const BASE_OPTIONS: SystemProviderId[] = ['zhipu', 'aihubmix', 'silicon', 'dmxapi', 'tokenflux', 'ovms', 'ppio']
+const BASE_OPTIONS: string[] = ['zhipu', 'aihubmix', 'silicon', 'dmxapi', 'tokenflux', 'ovms', 'ppio']
 
 const PaintingsRoutePage: FC = () => {
   const params = useParams()

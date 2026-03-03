@@ -3,7 +3,6 @@ import { useProvider } from '@renderer/hooks/useProvider'
 import { SettingDivider } from '@renderer/pages/settings'
 import { CollapsibleSettingGroup } from '@renderer/pages/settings/SettingGroup'
 import type { Model } from '@renderer/types'
-import { SystemProviderIds } from '@renderer/types'
 import {
   isSupportServiceTierProvider,
   isSupportStreamOptionsProvider,
@@ -34,7 +33,7 @@ const OpenAISettingsGroup: FC<Props> = ({ model, providerId, SettingGroup, Setti
     (provider.type === 'openai-response' || model.endpoint_type === 'openai-response' || provider.id === 'aihubmix')
   const showVerbositySetting = isSupportVerbosityModel(model) && isSupportVerbosityProvider(provider)
   const isSupportServiceTier = isSupportServiceTierProvider(provider)
-  const showServiceTierSetting = isSupportServiceTier && providerId !== SystemProviderIds.groq
+  const showServiceTierSetting = isSupportServiceTier && providerId !== 'groq'
   const showStreamOptionsSetting = isSupportStreamOptionsProvider(provider)
 
   if (!showSummarySetting && !showServiceTierSetting && !showVerbositySetting && !showStreamOptionsSetting) {

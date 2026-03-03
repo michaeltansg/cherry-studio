@@ -1,4 +1,4 @@
-import { type AzureOpenAIProvider, type Provider, SystemProviderIds } from '@renderer/types'
+import { type AzureOpenAIProvider, type Provider } from '@renderer/types'
 import { describe, expect, it, vi } from 'vitest'
 
 import {
@@ -52,7 +52,7 @@ const createProvider = (overrides: Partial<Provider> = {}): Provider => ({
 
 const createSystemProvider = (overrides: Partial<Provider> = {}): Provider =>
   createProvider({
-    id: SystemProviderIds.openai,
+    id: 'codesmart',
     isSystem: true,
     ...overrides
   })
@@ -96,13 +96,13 @@ describe('provider utils', () => {
       false
     )
 
-    expect(isSupportArrayContentProvider(createSystemProvider({ id: SystemProviderIds.deepseek }))).toBe(false)
+    expect(isSupportArrayContentProvider(createSystemProvider({ id: 'deepseek' }))).toBe(false)
   })
 
   it('evaluates developer role support', () => {
     expect(isSupportDeveloperRoleProvider(createProvider({ apiOptions: { isSupportDeveloperRole: true } }))).toBe(true)
     expect(isSupportDeveloperRoleProvider(createSystemProvider())).toBe(true)
-    expect(isSupportDeveloperRoleProvider(createSystemProvider({ id: SystemProviderIds.poe }))).toBe(false)
+    expect(isSupportDeveloperRoleProvider(createSystemProvider({ id: 'poe' }))).toBe(false)
   })
 
   it('checks stream options support', () => {
@@ -110,7 +110,7 @@ describe('provider utils', () => {
     expect(isSupportStreamOptionsProvider(createProvider({ apiOptions: { isNotSupportStreamOptions: true } }))).toBe(
       false
     )
-    expect(isSupportStreamOptionsProvider(createSystemProvider({ id: SystemProviderIds.mistral }))).toBe(false)
+    expect(isSupportStreamOptionsProvider(createSystemProvider({ id: 'mistral' }))).toBe(false)
   })
 
   it('checks enable thinking support', () => {
@@ -118,13 +118,16 @@ describe('provider utils', () => {
     expect(isSupportEnableThinkingProvider(createProvider({ apiOptions: { isNotSupportEnableThinking: true } }))).toBe(
       false
     )
-    expect(isSupportEnableThinkingProvider(createSystemProvider({ id: SystemProviderIds.nvidia }))).toBe(false)
+    expect(isSupportEnableThinkingProvider(createSystemProvider({ id: 'nvidia' }))).toBe(false)
   })
 
   it('determines service tier support', () => {
     expect(isSupportServiceTierProvider(createProvider({ apiOptions: { isSupportServiceTier: true } }))).toBe(true)
-    expect(isSupportServiceTierProvider(createSystemProvider())).toBe(true)
-    expect(isSupportServiceTierProvider(createSystemProvider({ id: SystemProviderIds.github }))).toBe(false)
+    // codesmart is not in SUPPORT_SERVICE_TIER_PROVIDERS, so use apiOptions flag instead
+    expect(isSupportServiceTierProvider(createSystemProvider({ apiOptions: { isSupportServiceTier: true } }))).toBe(
+      true
+    )
+    expect(isSupportServiceTierProvider(createSystemProvider())).toBe(false)
   })
 
   it('determines verbosity support', () => {
@@ -138,45 +141,37 @@ describe('provider utils', () => {
 
     // System providers that support verbosity (default behavior)
     expect(isSupportVerbosityProvider(createSystemProvider())).toBe(true)
-    expect(isSupportVerbosityProvider(createSystemProvider({ id: SystemProviderIds.openai }))).toBe(true)
+    expect(isSupportVerbosityProvider(createSystemProvider({ id: 'openai' }))).toBe(true)
 
     // System providers in the NOT_SUPPORT_VERBOSITY_PROVIDERS list (cannot be overridden by apiOptions)
-    expect(isSupportVerbosityProvider(createSystemProvider({ id: SystemProviderIds.groq }))).toBe(false)
+    expect(isSupportVerbosityProvider(createSystemProvider({ id: 'groq' }))).toBe(false)
     expect(
-      isSupportVerbosityProvider(
-        createSystemProvider({ id: SystemProviderIds.groq, apiOptions: { isNotSupportVerbosity: false } })
-      )
+      isSupportVerbosityProvider(createSystemProvider({ id: 'groq', apiOptions: { isNotSupportVerbosity: false } }))
     ).toBe(false)
 
     // apiOptions can disable verbosity for any provider
     expect(
-      isSupportVerbosityProvider(
-        createSystemProvider({ id: SystemProviderIds.openai, apiOptions: { isNotSupportVerbosity: true } })
-      )
+      isSupportVerbosityProvider(createSystemProvider({ id: 'openai', apiOptions: { isNotSupportVerbosity: true } }))
     ).toBe(false)
   })
 
   it('detects URL context capable providers', () => {
     expect(isSupportUrlContextProvider(createProvider({ type: 'gemini' }))).toBe(true)
-    expect(
-      isSupportUrlContextProvider(
-        createSystemProvider({ id: SystemProviderIds.cherryin, type: 'openai', isSystem: true })
-      )
-    ).toBe(true)
+    expect(isSupportUrlContextProvider(createSystemProvider({ id: 'cherryin', type: 'openai', isSystem: true }))).toBe(
+      true
+    )
     expect(isSupportUrlContextProvider(createProvider())).toBe(false)
   })
 
   it('identifies Gemini web search providers', () => {
-    expect(isGeminiWebSearchProvider(createSystemProvider({ id: SystemProviderIds.gemini, type: 'gemini' }))).toBe(true)
-    expect(isGeminiWebSearchProvider(createSystemProvider({ id: SystemProviderIds.vertexai, type: 'vertexai' }))).toBe(
-      true
-    )
+    expect(isGeminiWebSearchProvider(createSystemProvider({ id: 'gemini', type: 'gemini' }))).toBe(true)
+    expect(isGeminiWebSearchProvider(createSystemProvider({ id: 'vertexai', type: 'vertexai' }))).toBe(true)
     expect(isGeminiWebSearchProvider(createSystemProvider())).toBe(false)
   })
 
   it('detects New API providers by id or type', () => {
-    expect(isNewApiProvider(createProvider({ id: SystemProviderIds['new-api'] }))).toBe(true)
-    expect(isNewApiProvider(createProvider({ id: SystemProviderIds.cherryin }))).toBe(true)
+    expect(isNewApiProvider(createProvider({ id: 'new-api' }))).toBe(true)
+    expect(isNewApiProvider(createProvider({ id: 'cherryin' }))).toBe(true)
     expect(isNewApiProvider(createProvider({ type: 'new-api' }))).toBe(true)
     expect(isNewApiProvider(createProvider())).toBe(false)
   })
@@ -185,7 +180,7 @@ describe('provider utils', () => {
     expect(isCherryAIProvider(createProvider({ id: 'cherryai' }))).toBe(true)
     expect(isCherryAIProvider(createProvider())).toBe(false)
 
-    expect(isPerplexityProvider(createProvider({ id: SystemProviderIds.perplexity }))).toBe(true)
+    expect(isPerplexityProvider(createProvider({ id: 'perplexity' }))).toBe(true)
     expect(isPerplexityProvider(createProvider())).toBe(false)
   })
 
@@ -215,9 +210,10 @@ describe('provider utils', () => {
   })
 
   it('computes API version support', () => {
+    // codesmart is a valid system provider, not in NOT_SUPPORT list -> true
     expect(isSupportAPIVersionProvider(createSystemProvider())).toBe(true)
-    expect(isSupportAPIVersionProvider(createSystemProvider({ id: SystemProviderIds.github }))).toBe(false)
-    expect(isSupportAPIVersionProvider(createProvider())).toBe(true)
+    // github is no longer a system provider; test via apiOptions instead
     expect(isSupportAPIVersionProvider(createProvider({ apiOptions: { isNotSupportAPIVersion: false } }))).toBe(false)
+    expect(isSupportAPIVersionProvider(createProvider())).toBe(true)
   })
 })

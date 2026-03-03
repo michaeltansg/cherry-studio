@@ -2048,5 +2048,6 @@ export const SYSTEM_MODELS: Record<SystemProviderId | 'defaultModel', Model[]> =
       name: 'GLM-4.5V',
       group: 'GLM-4.5V'
     }
-  ]
+  ],
+  codesmart: []
 }

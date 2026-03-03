@@ -1,5 +1,5 @@
 import type { Model, Provider } from '@renderer/types'
-import { isSystemProvider, SystemProviderIds } from '@renderer/types'
+import { isSystemProvider } from '@renderer/types'
 
 export function buildGeminiGenerateImageParams(): Record<string, any> {
   return {
@@ -11,6 +11,6 @@ export function isOpenRouterGeminiGenerateImageModel(model: Model, provider: Pro
   return (
     model.id.includes('gemini-2.5-flash-image') &&
     isSystemProvider(provider) &&
-    provider.id === SystemProviderIds.openrouter
+    (provider.id as string) === 'openrouter'
   )
 }

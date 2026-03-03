@@ -32,7 +32,7 @@ import { DEFAULT_ASSISTANT_SETTINGS, getDefaultModel } from '@renderer/services/
 import store from '@renderer/store'
 import type { CherryWebSearchConfig } from '@renderer/store/websearch'
 import type { Model } from '@renderer/types'
-import { type Assistant, getEffectiveMcpMode, type MCPTool, type Provider, SystemProviderIds } from '@renderer/types'
+import { type Assistant, getEffectiveMcpMode, type MCPTool, type Provider } from '@renderer/types'
 import type { StreamTextParams } from '@renderer/types/aiCoreTypes'
 import { mapRegexToPatterns } from '@renderer/utils/blacklistMatchPattern'
 import { IdleTimeoutController, type IdleTimeoutHandle } from '@renderer/utils/IdleTimeoutController'
@@ -176,7 +176,7 @@ export async function buildStreamTextParams(
   if (enableWebSearch) {
     if (isBaseProvider(aiSdkProviderId)) {
       webSearchPluginConfig = buildProviderBuiltinWebSearchConfig(aiSdkProviderId, webSearchConfig, model)
-    } else if (isAIGatewayProvider(provider) || SystemProviderIds.gateway === provider.id) {
+    } else if (isAIGatewayProvider(provider) || 'gateway' === provider.id) {
       const aiSdkProviderId = mapVertexAIGatewayModelToProviderId(model)
       if (aiSdkProviderId) {
         webSearchPluginConfig = buildProviderBuiltinWebSearchConfig(aiSdkProviderId, webSearchConfig, model)
