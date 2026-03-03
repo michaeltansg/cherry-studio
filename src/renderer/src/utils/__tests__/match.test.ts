@@ -16,7 +16,7 @@ describe('match', () => {
 
   const sysProvider: SystemProvider = {
     ...provider,
-    id: 'dashscope',
+    id: 'codesmart',
     name: 'doesnt matter',
     isSystem: true
   } as const
@@ -78,8 +78,8 @@ describe('match', () => {
 
     it('should match i18n name for system provider', () => {
       // system provider 不应该通过 name 字段匹配
-      expect(matchKeywordsInProvider('dashscope', sysProvider)).toBe(true)
-      expect(matchKeywordsInProvider('Alibaba', sysProvider)).toBe(true)
+      // getProviderLabel('codesmart') falls back to 'codesmart', search string is 'codesmart codesmart'
+      expect(matchKeywordsInProvider('codesmart', sysProvider)).toBe(true)
       expect(matchKeywordsInProvider('doesnt matter', sysProvider)).toBe(false)
     })
   })
@@ -104,11 +104,11 @@ describe('match', () => {
     })
 
     it('should match model name and i18n provider name for system provider', () => {
-      expect(matchKeywordsInModel('gpt-4.1 dashscope', model, sysProvider)).toBe(true)
-      expect(matchKeywordsInModel('dashscope', model, sysProvider)).toBe(true)
+      // getProviderLabel('codesmart') falls back to 'codesmart', search string is 'codesmart codesmart'
+      expect(matchKeywordsInModel('gpt-4.1 codesmart', model, sysProvider)).toBe(true)
+      expect(matchKeywordsInModel('codesmart', model, sysProvider)).toBe(true)
       // system provider 不会直接用 name 检索
       expect(matchKeywordsInModel('doesnt matter', model, sysProvider)).toBe(false)
-      expect(matchKeywordsInModel('Alibaba', model, sysProvider)).toBe(true)
     })
 
     it('should match model by id when name is customized', () => {

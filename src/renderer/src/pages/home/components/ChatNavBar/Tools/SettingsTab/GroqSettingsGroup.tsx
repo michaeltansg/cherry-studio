@@ -3,7 +3,6 @@ import { useProvider } from '@renderer/hooks/useProvider'
 import { SettingDivider, SettingRow } from '@renderer/pages/settings'
 import { CollapsibleSettingGroup } from '@renderer/pages/settings/SettingGroup'
 import type { GroqServiceTier, ServiceTier } from '@renderer/types'
-import { SystemProviderIds } from '@renderer/types'
 import { toOptionValue, toRealValue } from '@renderer/utils/select'
 import { Tooltip } from 'antd'
 import { CircleHelp } from 'lucide-react'
@@ -20,7 +19,7 @@ interface Props {
 
 const GroqSettingsGroup: FC<Props> = ({ SettingGroup, SettingRowTitleSmall }) => {
   const { t } = useTranslation()
-  const { provider, updateProvider } = useProvider(SystemProviderIds.groq)
+  const { provider, updateProvider } = useProvider('groq')
   const serviceTierMode = provider.serviceTier
 
   const setServiceTierMode = useCallback(

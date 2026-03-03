@@ -82,7 +82,6 @@ vi.mock('@renderer/hooks/useSettings', () => ({
 
 import { getProviderByModel } from '@renderer/services/AssistantService'
 import type { Model, Provider } from '@renderer/types'
-import { SystemProviderIds } from '@renderer/types'
 
 import { isOpenAIDeepResearchModel } from '../openai'
 import {
@@ -167,7 +166,7 @@ describe('websearch helpers', () => {
     })
 
     it('handles Anthropic providers on unsupported platforms', () => {
-      providerMock.mockReturnValueOnce(createProvider({ id: SystemProviderIds['aws-bedrock'] }))
+      providerMock.mockReturnValueOnce(createProvider({ id: 'aws-bedrock' }))
       const model = createModel({ id: 'claude-2-sonnet' })
       expect(isWebSearchModel(model)).toBe(false)
     })
@@ -188,15 +187,15 @@ describe('websearch helpers', () => {
     })
 
     it('supports Perplexity sonar families including mandatory variants', () => {
-      providerMock.mockReturnValueOnce(createProvider({ id: SystemProviderIds.perplexity }))
+      providerMock.mockReturnValueOnce(createProvider({ id: 'perplexity' }))
       expect(isWebSearchModel(createModel({ id: 'sonar-deep-research' }))).toBe(true)
     })
 
     it('handles AIHubMix Gemini and OpenAI search models', () => {
-      providerMock.mockReturnValueOnce(createProvider({ id: SystemProviderIds.aihubmix }))
+      providerMock.mockReturnValueOnce(createProvider({ id: 'aihubmix' }))
       expect(isWebSearchModel(createModel({ id: 'gemini-2.5-pro-preview' }))).toBe(true)
 
-      providerMock.mockReturnValueOnce(createProvider({ id: SystemProviderIds.aihubmix }))
+      providerMock.mockReturnValueOnce(createProvider({ id: 'aihubmix' }))
       const openaiSearch = createModel({ id: 'gpt-4o-search-preview' })
       expect(isWebSearchModel(openaiSearch)).toBe(true)
     })
@@ -214,7 +213,7 @@ describe('websearch helpers', () => {
     })
 
     it('falls back to Gemini/Vertex provider regex matching', () => {
-      providerMock.mockReturnValueOnce(createProvider({ id: SystemProviderIds.vertexai }))
+      providerMock.mockReturnValueOnce(createProvider({ id: 'vertexai' }))
       providerMocks.isGeminiProvider.mockReturnValueOnce(true)
       expect(isWebSearchModel(createModel({ id: 'gemini-2.0-flash-latest' }))).toBe(true)
     })
@@ -243,10 +242,10 @@ describe('websearch helpers', () => {
 
   describe('isMandatoryWebSearchModel', () => {
     it('requires sonar ids for perplexity/openrouter providers', () => {
-      providerMock.mockReturnValueOnce(createProvider({ id: SystemProviderIds.perplexity }))
+      providerMock.mockReturnValueOnce(createProvider({ id: 'perplexity' }))
       expect(isMandatoryWebSearchModel(createModel({ id: 'sonar-pro' }))).toBe(true)
 
-      providerMock.mockReturnValueOnce(createProvider({ id: SystemProviderIds.openrouter }))
+      providerMock.mockReturnValueOnce(createProvider({ id: 'openrouter' }))
       expect(isMandatoryWebSearchModel(createModel({ id: 'sonar-reasoning' }))).toBe(true)
 
       providerMock.mockReturnValueOnce(createProvider({ id: 'openai' }))
@@ -335,7 +334,7 @@ describe('websearch helpers', () => {
     it.each(['sonar', 'sonar-pro', 'sonar-reasoning-pro', 'sonar-deep-research'])(
       'perplexity provider supports %s',
       (id) => {
-        providerMock.mockReturnValue(createProvider({ id: SystemProviderIds.perplexity }))
+        providerMock.mockReturnValue(createProvider({ id: 'perplexity' }))
         expect(isWebSearchModel(createModel({ id }))).toBe(true)
       }
     )
@@ -346,7 +345,7 @@ describe('websearch helpers', () => {
       'gemini-flash-lite-latest',
       'gemini-pro-latest'
     ])('Gemini provider supports %s', (id) => {
-      providerMock.mockReturnValue(createProvider({ id: SystemProviderIds.vertexai }))
+      providerMock.mockReturnValue(createProvider({ id: 'vertexai' }))
       providerMocks.isGeminiProvider.mockReturnValue(true)
       expect(isWebSearchModel(createModel({ id }))).toBe(true)
     })

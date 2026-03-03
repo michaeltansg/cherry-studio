@@ -40,7 +40,7 @@ import {
 import { getStoreSetting } from '@renderer/hooks/useSettings'
 import { getAssistantSettings, getProviderByModel } from '@renderer/services/AssistantService'
 import type { Assistant, Model, ReasoningEffortOption } from '@renderer/types'
-import { EFFORT_RATIO, isSystemProvider, SystemProviderIds } from '@renderer/types'
+import { EFFORT_RATIO, isSystemProvider } from '@renderer/types'
 import type { OpenAIReasoningSummary } from '@renderer/types/aiCoreTypes'
 import type { ReasoningEffortOptionalParams } from '@renderer/types/sdk'
 import { isSupportEnableThinkingProvider } from '@renderer/utils/provider'
@@ -76,7 +76,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
   // Handle 'none' reasoningEffort. It's explicitly off.
   if (reasoningEffort === 'none') {
     // openrouter: use reasoning
-    if (model.provider === SystemProviderIds.openrouter) {
+    if (model.provider === 'openrouter') {
       if (isSupportNoneReasoningEffortModel(model) && reasoningEffort === 'none') {
         return { reasoning: { effort: 'none' } }
       }
@@ -87,7 +87,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
     if (
       (isSupportEnableThinkingProvider(provider) &&
         (isSupportedThinkingTokenQwenModel(model) || isSupportedThinkingTokenHunyuanModel(model))) ||
-      (provider.id === SystemProviderIds.dashscope &&
+      (provider.id === 'dashscope' &&
         (isDeepSeekHybridInferenceModel(model) ||
           isSupportedThinkingTokenZhipuModel(model) ||
           isSupportedThinkingTokenKimiModel(model)))
@@ -96,7 +96,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
     }
 
     // together
-    if (provider.id === SystemProviderIds.together) {
+    if (provider.id === 'together') {
       return { reasoning: { enabled: false } }
     }
 
@@ -124,7 +124,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
       isSupportedThinkingTokenZhipuModel(model) ||
       isSupportedThinkingTokenKimiModel(model)
     ) {
-      if (provider.id === SystemProviderIds.cerebras) {
+      if (provider.id === 'cerebras') {
         return {
           disable_reasoning: true
         }
@@ -161,7 +161,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
   // reasoningEffort有效的情况
   // https://creator.poe.com/docs/external-applications/openai-compatible-api#additional-considerations
   // Poe provider - supports custom bot parameters via extra_body
-  if (provider.id === SystemProviderIds.poe) {
+  if (provider.id === 'poe') {
     if (isOpenAIReasoningModel(model)) {
       return {
         extra_body: {
@@ -223,7 +223,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
   }
 
   // OpenRouter models
-  if (model.provider === SystemProviderIds.openrouter) {
+  if (model.provider === 'openrouter') {
     // Grok 4 Fast doesn't support effort levels, always use enabled: true
     if (isGrok4FastReasoningModel(model)) {
       return {
@@ -251,7 +251,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
   }
 
   // See https://docs.siliconflow.cn/cn/api-reference/chat-completions/chat-completions
-  if (model.provider === SystemProviderIds.silicon) {
+  if (model.provider === 'silicon') {
     if (
       isDeepSeekHybridInferenceModel(model) ||
       isSupportedThinkingTokenZhipuModel(model) ||
@@ -271,15 +271,15 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
   // 不同的 provider 有不同的思考控制方式，在这里统一解决
   if (isDeepSeekHybridInferenceModel(model)) {
     if (isSystemProvider(provider)) {
-      switch (provider.id) {
-        case SystemProviderIds.dashscope:
+      switch (provider.id as string) {
+        case 'dashscope':
           return {
             enable_thinking: true,
             incremental_output: true
           }
         // TODO: 支持 new-api类型
-        case SystemProviderIds['new-api']:
-        case SystemProviderIds.cherryin: {
+        case 'new-api':
+        case 'cherryin': {
           return {
             extra_body: {
               thinking: {
@@ -288,21 +288,21 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
             }
           }
         }
-        case SystemProviderIds.hunyuan:
-        case SystemProviderIds['tencent-cloud-ti']:
-        case SystemProviderIds.doubao:
-        case SystemProviderIds.deepseek:
-        case SystemProviderIds.aihubmix:
-        case SystemProviderIds.sophnet:
-        case SystemProviderIds.ppio:
-        case SystemProviderIds.dmxapi:
+        case 'hunyuan':
+        case 'tencent-cloud-ti':
+        case 'doubao':
+        case 'deepseek':
+        case 'aihubmix':
+        case 'sophnet':
+        case 'ppio':
+        case 'dmxapi':
           return {
             thinking: {
               type: 'enabled' // auto is invalid
             }
           }
-        case SystemProviderIds.openrouter:
-        case SystemProviderIds.together:
+        case 'openrouter':
+        case 'together':
           return {
             reasoning: {
               enabled: true
@@ -330,7 +330,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
 
   // OpenRouter models, use reasoning
   // FIXME: duplicated openrouter handling. remove one
-  if (model.provider === SystemProviderIds.openrouter) {
+  if (model.provider === 'openrouter') {
     if (isSupportedReasoningEffortModel(model) || isSupportedThinkingTokenModel(model)) {
       return {
         reasoning: {
@@ -341,7 +341,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
   }
 
   // https://help.aliyun.com/zh/model-studio/deep-thinking
-  if (provider.id === SystemProviderIds.dashscope) {
+  if (provider.id === 'dashscope') {
     // For dashscope: Qwen, DeepSeek, and GLM models use enable_thinking to control thinking
     // No effort, only on/off
     if (
@@ -357,7 +357,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
   }
 
   // https://docs.together.ai/reference/chat-completions-1#body-reasoning-effort
-  if (provider.id === SystemProviderIds.together) {
+  if (provider.id === 'together') {
     let adjustedReasoningEffort: 'low' | 'medium' | 'high' = 'medium'
     switch (reasoningEffort) {
       case 'minimal':
@@ -482,7 +482,7 @@ export function getReasoningEffort(assistant: Assistant, model: Model): Reasonin
     return {}
   }
   if (isSupportedThinkingTokenZhipuModel(model)) {
-    if (provider.id === SystemProviderIds.cerebras) {
+    if (provider.id === 'cerebras') {
       return {}
     }
     return { thinking: { type: 'enabled' } }

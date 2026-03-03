@@ -48,7 +48,7 @@ import type {
   TranslateLanguageCode,
   WebSearchProvider
 } from '@renderer/types'
-import { isBuiltinMCPServer, isSystemProvider, SystemProviderIds } from '@renderer/types'
+import { isBuiltinMCPServer, isSystemProvider } from '@renderer/types'
 import { getDefaultGroupName, getLeadingEmoji, runAsyncFunction, uuid } from '@renderer/utils'
 import {
   isSupportArrayContentProvider,
@@ -2133,7 +2133,7 @@ const migrateConfig = {
   '128': (state: RootState) => {
     try {
       // 迁移 service tier 设置
-      const openai = state.llm.providers.find((provider) => provider.id === SystemProviderIds.openai)
+      const openai = state.llm.providers.find((provider) => provider.id === 'openai')
       const serviceTier = state.settings.openAI.serviceTier
       if (openai) {
         openai.serviceTier = serviceTier
@@ -2553,7 +2553,7 @@ const migrateConfig = {
   '156': (state: RootState) => {
     try {
       state.llm.providers.forEach((provider) => {
-        if (provider.id === SystemProviderIds.anthropic) {
+        if (provider.id === 'anthropic') {
           if (provider.apiHost.endsWith('/')) {
             provider.apiHost = provider.apiHost.slice(0, -1)
           }
@@ -2768,11 +2768,11 @@ const migrateConfig = {
 
       // Migrate llm providers
       state.llm.providers.forEach((provider) => {
-        if (provider.id === SystemProviderIds['new-api'] && provider.type !== 'new-api') {
+        if (provider.id === 'new-api' && provider.type !== 'new-api') {
           provider.type = 'new-api'
         }
 
-        switch (provider.id) {
+        switch (provider.id as string) {
           case 'deepseek':
             provider.anthropicApiHost = 'https://api.deepseek.com/anthropic'
             break
@@ -2825,12 +2825,12 @@ const migrateConfig = {
   },
   '174': (state: RootState) => {
     try {
-      addProvider(state, SystemProviderIds.longcat)
+      addProvider(state, 'longcat')
 
       addProvider(state, 'gateway')
       addProvider(state, 'cerebras')
       state.llm.providers.forEach((provider) => {
-        if (provider.id === SystemProviderIds.minimax) {
+        if (provider.id === 'minimax') {
           provider.anthropicApiHost = 'https://api.minimaxi.com/anthropic'
         }
       })
@@ -2864,10 +2864,10 @@ const migrateConfig = {
   '176': (state: RootState) => {
     try {
       state.llm.providers.forEach((provider) => {
-        if (provider.id === SystemProviderIds.qiniu) {
+        if (provider.id === 'qiniu') {
           provider.anthropicApiHost = 'https://api.qnaigc.com'
         }
-        if (provider.id === SystemProviderIds.longcat) {
+        if (provider.id === 'longcat') {
           provider.anthropicApiHost = 'https://api.longcat.chat/anthropic'
         }
       })
@@ -2892,7 +2892,7 @@ const migrateConfig = {
   },
   '178': (state: RootState) => {
     try {
-      const groq = state.llm.providers.find((p) => p.id === SystemProviderIds.groq)
+      const groq = state.llm.providers.find((p) => p.id === 'groq')
       if (groq) {
         groq.verbosity = undefined
       }
@@ -2906,14 +2906,14 @@ const migrateConfig = {
   '179': (state: RootState) => {
     try {
       state.llm.providers.forEach((provider) => {
-        switch (provider.id) {
-          case SystemProviderIds.silicon:
+        switch (provider.id as string) {
+          case 'silicon':
             provider.anthropicApiHost = 'https://api.siliconflow.cn'
             break
-          case SystemProviderIds.qiniu:
+          case 'qiniu':
             provider.anthropicApiHost = 'https://api.qnaigc.com'
             break
-          case SystemProviderIds.dmxapi:
+          case 'dmxapi':
             provider.anthropicApiHost = provider.apiHost
             break
         }
@@ -2929,12 +2929,12 @@ const migrateConfig = {
     try {
       state.llm.providers.forEach((provider) => {
         if (provider.id === 'ai-gateway') {
-          provider.id = SystemProviderIds.gateway
+          provider.id = 'gateway'
         }
         // Also update model.provider references to avoid orphaned models
         provider.models?.forEach((model) => {
           if (model.provider === 'ai-gateway') {
-            model.provider = SystemProviderIds.gateway
+            model.provider = 'gateway'
           }
         })
         // @ts-ignore
@@ -2967,12 +2967,12 @@ const migrateConfig = {
   '183': (state: RootState) => {
     try {
       state.llm.providers.forEach((provider) => {
-        if (provider.id === SystemProviderIds.cherryin) {
+        if (provider.id === 'cherryin') {
           provider.apiHost = 'https://open.cherryin.cc'
           provider.anthropicApiHost = 'https://open.cherryin.cc'
         }
       })
-      state.llm.providers = moveProvider(state.llm.providers, SystemProviderIds.poe, 10)
+      state.llm.providers = moveProvider(state.llm.providers, 'poe', 10)
       logger.info('migrate 183 success')
       return state
     } catch (error) {
@@ -3040,7 +3040,7 @@ const migrateConfig = {
         state.settings.openAI.verbosity = undefined
       }
       state.llm.providers.forEach((provider) => {
-        if (provider.id === SystemProviderIds.ollama) {
+        if (provider.id === 'ollama') {
           provider.type = 'ollama'
         }
       })
@@ -3070,7 +3070,7 @@ const migrateConfig = {
   '188': (state: RootState) => {
     try {
       state.llm.providers.forEach((provider) => {
-        if (provider.id === SystemProviderIds.openrouter) {
+        if (provider.id === 'openrouter') {
           provider.anthropicApiHost = 'https://openrouter.ai/api'
         }
       })
@@ -3114,7 +3114,7 @@ const migrateConfig = {
   '190': (state: RootState) => {
     try {
       state.llm.providers.forEach((provider) => {
-        if (provider.id === SystemProviderIds.ollama) {
+        if (provider.id === 'ollama') {
           provider.type = 'ollama'
         }
       })
@@ -3253,6 +3253,19 @@ const migrateConfig = {
       return state
     } catch (error) {
       logger.error('migrate 199 error', error as Error)
+      return state
+    }
+  },
+  '200': (state: RootState) => {
+    try {
+      // Replace all system providers with CodeSmart (LiteLLM-compatible)
+      const userProviders = state.llm.providers.filter((p) => !p.isSystem)
+      const codesmartProvider = SYSTEM_PROVIDERS[0]
+      state.llm.providers = [codesmartProvider, ...userProviders]
+      logger.info('migrate 200 success')
+      return state
+    } catch (error) {
+      logger.error('migrate 200 error', error as Error)
       return state
     }
   }

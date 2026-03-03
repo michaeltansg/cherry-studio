@@ -12,7 +12,7 @@ import { getProviderByModel } from '@renderer/services/AssistantService'
 import { getProviderById } from '@renderer/services/ProviderService'
 import store from '@renderer/store'
 import type { EndpointType } from '@renderer/types'
-import { isSystemProvider, type Model, type Provider, SystemProviderIds } from '@renderer/types'
+import { isSystemProvider, type Model, type Provider } from '@renderer/types'
 import type { OpenAICompletionsStreamOptions } from '@renderer/types/aiCoreTypes'
 import {
   formatApiHost,
@@ -52,10 +52,11 @@ function handleSpecialProviders(model: Model, provider: Provider): Provider {
   }
 
   if (isSystemProvider(provider)) {
-    if (provider.id === 'aihubmix') {
+    const providerId = provider.id as string
+    if (providerId === 'aihubmix') {
       return aihubmixProviderCreator(model, provider)
     }
-    if (provider.id === 'vertexai') {
+    if (providerId === 'vertexai') {
       return vertexAnthropicProviderCreator(model, provider)
     }
   }
@@ -86,7 +87,7 @@ export function formatProviderApiHost(provider: Provider): Provider {
     if (!formatted.anthropicApiHost) {
       formatted.anthropicApiHost = formatted.apiHost
     }
-  } else if (formatted.id === SystemProviderIds.copilot || formatted.id === SystemProviderIds.github) {
+  } else if (formatted.id === 'copilot' || formatted.id === 'github') {
     formatted.apiHost = formatApiHost(formatted.apiHost, false)
   } else if (isOllamaProvider(formatted)) {
     formatted.apiHost = formatOllamaApiHost(formatted.apiHost)
@@ -203,7 +204,7 @@ export function providerToAiSdkConfig(actualProvider: Provider, model: Model): A
 
   // Specially, some providers which need to early return
   // Copilot
-  const isCopilotProvider = actualProvider.id === SystemProviderIds.copilot
+  const isCopilotProvider = actualProvider.id === 'copilot'
   if (isCopilotProvider) {
     const storedHeaders = store.getState().copilot.defaultHeaders ?? {}
     const options = ProviderConfigFactory.fromProvider('github-copilot-openai-compatible', baseConfig, {
@@ -336,7 +337,7 @@ export function providerToAiSdkConfig(actualProvider: Provider, model: Model): A
     baseConfig.baseURL += aiSdkProviderId === 'google-vertex' ? '/publishers/google' : '/publishers/anthropic/models'
   } else if (aiSdkProviderId === 'cherryin') {
     // CherryIN API Host
-    const cherryinProvider = getProviderById(SystemProviderIds.cherryin)
+    const cherryinProvider = getProviderById('cherryin')
     const endpointType: EndpointType | undefined = model.endpoint_type
     let anthropicBaseURL: string | undefined
     let geminiBaseURL: string | undefined
@@ -456,7 +457,7 @@ export async function prepareSpecialProviderConfig(
   provider: Provider,
   config: ReturnType<typeof providerToAiSdkConfig>
 ) {
-  switch (provider.id) {
+  switch (provider.id as string) {
     case 'copilot': {
       const defaultHeaders = store.getState().copilot.defaultHeaders ?? {}
       const headers = {

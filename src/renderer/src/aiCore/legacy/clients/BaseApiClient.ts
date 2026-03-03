@@ -30,8 +30,7 @@ import {
   GroqServiceTiers,
   isGroqServiceTier,
   isOpenAIServiceTier,
-  OpenAIServiceTiers,
-  SystemProviderIds
+  OpenAIServiceTiers
 } from '@renderer/types'
 import type { OpenAIVerbosity } from '@renderer/types/aiCoreTypes'
 import type { Message } from '@renderer/types/newMessage'
@@ -225,7 +224,7 @@ export abstract class BaseApiClient<
     }
 
     // 处理不同供应商需要 fallback 到默认值的情况
-    if (this.provider.id === SystemProviderIds.groq) {
+    if (this.provider.id === 'groq') {
       if (
         !isGroqServiceTier(serviceTierSetting) ||
         (serviceTierSetting === GroqServiceTiers.flex && !isSupportFlexServiceTierModel(model))

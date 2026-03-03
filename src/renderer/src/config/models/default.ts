@@ -1,4 +1,4 @@
-import type { Model, SystemProviderId } from '@renderer/types'
+import type { Model } from '@renderer/types'
 
 export const qwen38bModel: Model = {
   id: 'Qwen/Qwen3-8B',
@@ -14,12 +14,19 @@ export const qwen3Next80BModel: Model = {
   group: 'Qwen'
 }
 
-export const SYSTEM_MODELS: Record<SystemProviderId | 'defaultModel', Model[]> = {
+const defaultCodeSmartModel: Model = {
+  id: 'default',
+  name: 'Default',
+  provider: 'codesmart',
+  group: 'CodeSmart'
+}
+
+export const SYSTEM_MODELS: Record<string, Model[]> = {
   defaultModel: [
     // Default assistant model
-    qwen3Next80BModel,
+    defaultCodeSmartModel,
     // Default topic naming model
-    qwen38bModel,
+    defaultCodeSmartModel,
     // Default translation model
     qwen3Next80BModel,
     // Default quick assistant model
@@ -1960,5 +1967,6 @@ export const SYSTEM_MODELS: Record<SystemProviderId | 'defaultModel', Model[]> =
       provider: 'mimo',
       group: 'Mimo'
     }
-  ]
+  ],
+  codesmart: []
 }

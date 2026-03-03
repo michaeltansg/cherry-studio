@@ -17,8 +17,7 @@ import { checkApi } from '@renderer/services/ApiService'
 import { isProviderSupportAuth } from '@renderer/services/ProviderService'
 import { useAppDispatch } from '@renderer/store'
 import { updateWebSearchProvider } from '@renderer/store/websearch'
-import type { SystemProviderId } from '@renderer/types'
-import { isSystemProvider, isSystemProviderId, SystemProviderIds } from '@renderer/types'
+import { isSystemProvider, isSystemProviderId } from '@renderer/types'
 import type { ApiKeyConnectivity } from '@renderer/types/healthCheck'
 import { HealthStatus } from '@renderer/types/healthCheck'
 import { formatApiHost, formatApiKeys, getFancyProviderName, validateApiHost } from '@renderer/utils'
@@ -71,22 +70,22 @@ interface Props {
 }
 
 const ANTHROPIC_COMPATIBLE_PROVIDER_IDS = [
-  SystemProviderIds.deepseek,
-  SystemProviderIds.moonshot,
-  SystemProviderIds.zhipu,
-  SystemProviderIds.dashscope,
-  SystemProviderIds.modelscope,
-  SystemProviderIds.aihubmix,
-  SystemProviderIds.grok,
-  SystemProviderIds.cherryin,
-  SystemProviderIds.longcat,
-  SystemProviderIds.minimax,
-  SystemProviderIds.silicon,
-  SystemProviderIds.qiniu,
-  SystemProviderIds.dmxapi,
-  SystemProviderIds.mimo,
-  SystemProviderIds.openrouter,
-  SystemProviderIds.tokenflux
+  'deepseek',
+  'moonshot',
+  'zhipu',
+  'dashscope',
+  'modelscope',
+  'aihubmix',
+  'grok',
+  'cherryin',
+  'longcat',
+  'minimax',
+  'silicon',
+  'qiniu',
+  'dmxapi',
+  'mimo',
+  'openrouter',
+  'tokenflux'
 ] as const
 type AnthropicCompatibleProviderId = (typeof ANTHROPIC_COMPATIBLE_PROVIDER_IDS)[number]
 
@@ -114,9 +113,9 @@ const ProviderSetting: FC<Props> = ({ providerId }) => {
   const isDmxapi = provider.id === 'dmxapi'
   const isCherryIN = provider.id === 'cherryin'
   const isChineseUser = i18n.language.startsWith('zh')
-  const noAPIInputProviders = ['aws-bedrock'] as const satisfies SystemProviderId[]
+  const noAPIInputProviders = ['aws-bedrock'] as const
   const hideApiInput = noAPIInputProviders.some((id) => id === provider.id)
-  const noAPIKeyInputProviders = ['copilot', 'vertexai'] as const satisfies SystemProviderId[]
+  const noAPIKeyInputProviders = ['copilot', 'vertexai'] as const
   const hideApiKeyInput = noAPIKeyInputProviders.some((id) => id === provider.id)
 
   const providerConfig = PROVIDER_URLS[provider.id]
@@ -414,7 +413,7 @@ const ProviderSetting: FC<Props> = ({ providerId }) => {
         <Flex align="center" gap={8}>
           <ProviderName>{fancyProviderName}</ProviderName>
           {officialWebsite && (
-            <Link target="_blank" href={providerConfig.websites.official} style={{ display: 'flex' }}>
+            <Link target="_blank" href={providerConfig?.websites?.official} style={{ display: 'flex' }}>
               <Button type="text" size="small" icon={<SquareArrowOutUpRight size={14} />} />
             </Link>
           )}

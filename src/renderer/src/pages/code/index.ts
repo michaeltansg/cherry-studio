@@ -4,7 +4,7 @@ import {
   isSupportedReasoningEffortModel,
   isSupportedThinkingTokenClaudeModel
 } from '@renderer/config/models/reasoning'
-import { type EndpointType, type Model, type Provider, SystemProviderIds } from '@renderer/types'
+import type { EndpointType, Model, Provider } from '@renderer/types'
 import { formatApiHost } from '@renderer/utils/api'
 import { getFancyProviderName, sanitizeProviderName } from '@renderer/utils/naming'
 import { codeTools } from '@shared/config/constant'
@@ -47,10 +47,10 @@ export const CLAUDE_OFFICIAL_SUPPORTED_PROVIDERS = [
   'modelscope',
   'minimax',
   'longcat',
-  SystemProviderIds.qiniu,
-  SystemProviderIds.silicon,
-  SystemProviderIds.mimo,
-  SystemProviderIds.openrouter
+  'qiniu',
+  'silicon',
+  'mimo',
+  'openrouter'
 ]
 export const CLAUDE_SUPPORTED_PROVIDERS = [
   'aihubmix',

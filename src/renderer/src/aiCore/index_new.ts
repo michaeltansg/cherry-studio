@@ -14,7 +14,7 @@ import { getEnableDeveloperMode } from '@renderer/hooks/useSettings'
 import { normalizeGatewayModels, normalizeSdkModels } from '@renderer/services/models/ModelAdapter'
 import { addSpan, endSpan } from '@renderer/services/SpanManagerService'
 import type { StartSpanParams } from '@renderer/trace/types/ModelSpanEntity'
-import { type Assistant, type GenerateImageParams, type Model, type Provider, SystemProviderIds } from '@renderer/types'
+import type { Assistant, GenerateImageParams, Model, Provider } from '@renderer/types'
 import type { StreamTextParams } from '@renderer/types/aiCoreTypes'
 import { SUPPORTED_IMAGE_ENDPOINT_LIST } from '@renderer/utils'
 import { buildClaudeCodeSystemModelMessage } from '@shared/anthropic'
@@ -190,7 +190,7 @@ export default class ModernAiProvider {
     config: ModernAiProviderConfig
   ): Promise<CompletionsResult> {
     // ai-gateway不是image/generation 端点，所以就先不走legacy了
-    if (config.isImageGenerationEndpoint && this.getActualProvider().id !== SystemProviderIds.gateway) {
+    if (config.isImageGenerationEndpoint && this.getActualProvider().id !== 'gateway') {
       // 使用 legacy 实现处理图像生成（支持图片编辑等高级功能）
       if (!config.uiMessages) {
         throw new Error('uiMessages is required for image generation endpoint')
@@ -477,7 +477,7 @@ export default class ModernAiProvider {
 
   // 代理其他方法到原有实现
   public async models() {
-    if (this.actualProvider.id === SystemProviderIds.gateway) {
+    if (this.actualProvider.id === 'gateway') {
       const gatewayModels = (await gateway.getAvailableModels()).models
       return normalizeGatewayModels(this.actualProvider, gatewayModels)
     }

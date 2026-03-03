@@ -300,7 +300,7 @@ describe('naming', () => {
   describe('getFancyProviderName', () => {
     it('should get i18n name for system provider', () => {
       const mockSystemProvider: SystemProvider = {
-        id: 'dashscope',
+        id: 'codesmart',
         type: 'openai',
         name: 'whatever',
         apiHost: 'whatever',
@@ -308,8 +308,8 @@ describe('naming', () => {
         models: [],
         isSystem: true
       }
-      // 默认 i18n 环境是 en-us
-      expect(getFancyProviderName(mockSystemProvider)).toBe('Alibaba Cloud')
+      // 'codesmart' is not in providerKeyMap, so getProviderLabel falls back to 'codesmart'
+      expect(getFancyProviderName(mockSystemProvider)).toBe('codesmart')
     })
 
     it('should get name for custom provider', () => {

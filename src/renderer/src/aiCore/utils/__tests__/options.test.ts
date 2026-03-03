@@ -4,7 +4,7 @@
  */
 
 import type { Assistant, Model, Provider } from '@renderer/types'
-import { OpenAIServiceTiers, SystemProviderIds } from '@renderer/types'
+import { OpenAIServiceTiers } from '@renderer/types'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { buildProviderOptions } from '../options'
@@ -77,7 +77,7 @@ vi.mock(import('@renderer/utils/provider'), async (importOriginal) => {
   return {
     ...(await importOriginal()),
     isSupportServiceTierProvider: vi.fn((provider) => {
-      return [SystemProviderIds.openai, SystemProviderIds.groq].includes(provider.id)
+      return ['openai', 'groq'].includes(provider.id)
     })
   }
 })
@@ -108,6 +108,17 @@ vi.mock('@renderer/services/AssistantService', () => ({
   getProviderByModel: vi.fn((model: Model) => ({
     id: model.provider,
     name: 'Mock Provider'
+  }))
+}))
+
+vi.mock('@renderer/services/ProviderService', () => ({
+  getProviderById: vi.fn((id: string) => ({
+    id,
+    name: `Mock ${id}`,
+    type: 'openai',
+    apiKey: 'test-key',
+    apiHost: 'https://api.example.com',
+    models: []
   }))
 }))
 
@@ -172,7 +183,7 @@ describe('options utils', () => {
   const mockModel: Model = {
     id: 'gpt-4',
     name: 'GPT-4',
-    provider: SystemProviderIds.openai
+    provider: 'openai'
   } as Model
 
   beforeEach(async () => {
@@ -185,7 +196,7 @@ describe('options utils', () => {
   describe('buildProviderOptions', () => {
     describe('OpenAI provider', () => {
       const openaiProvider: Provider = {
-        id: SystemProviderIds.openai,
+        id: 'openai',
         name: 'OpenAI',
         type: 'openai-response',
         apiKey: 'test-key',
@@ -235,7 +246,7 @@ describe('options utils', () => {
 
     describe('Anthropic provider', () => {
       const anthropicProvider: Provider = {
-        id: SystemProviderIds.anthropic,
+        id: 'anthropic',
         name: 'Anthropic',
         type: 'anthropic',
         apiKey: 'test-key',
@@ -246,7 +257,7 @@ describe('options utils', () => {
       const anthropicModel: Model = {
         id: 'claude-3-5-sonnet-20241022',
         name: 'Claude 3.5 Sonnet',
-        provider: SystemProviderIds.anthropic
+        provider: 'anthropic'
       } as Model
 
       it('should build basic Anthropic options', () => {
@@ -277,7 +288,7 @@ describe('options utils', () => {
 
     describe('Google provider', () => {
       const googleProvider: Provider = {
-        id: SystemProviderIds.gemini,
+        id: 'gemini',
         name: 'Google',
         type: 'gemini',
         apiKey: 'test-key',
@@ -289,7 +300,7 @@ describe('options utils', () => {
       const googleModel: Model = {
         id: 'gemini-2.0-flash-exp',
         name: 'Gemini 2.0 Flash',
-        provider: SystemProviderIds.gemini
+        provider: 'gemini'
       } as Model
 
       it('should build basic Google options', () => {
@@ -330,7 +341,7 @@ describe('options utils', () => {
 
     describe('xAI provider', () => {
       const xaiProvider = {
-        id: SystemProviderIds.grok,
+        id: 'grok',
         name: 'xAI',
         type: 'new-api',
         apiKey: 'test-key',
@@ -342,7 +353,7 @@ describe('options utils', () => {
       const xaiModel: Model = {
         id: 'grok-2-latest',
         name: 'Grok 2',
-        provider: SystemProviderIds.grok
+        provider: 'grok'
       } as Model
 
       it('should build basic xAI options', () => {
@@ -370,7 +381,7 @@ describe('options utils', () => {
 
     describe('DeepSeek provider', () => {
       const deepseekProvider: Provider = {
-        id: SystemProviderIds.deepseek,
+        id: 'deepseek',
         name: 'DeepSeek',
         type: 'openai',
         apiKey: 'test-key',
@@ -381,7 +392,7 @@ describe('options utils', () => {
       const deepseekModel: Model = {
         id: 'deepseek-chat',
         name: 'DeepSeek Chat',
-        provider: SystemProviderIds.deepseek
+        provider: 'deepseek'
       } as Model
 
       it('should build basic DeepSeek options', () => {
@@ -397,7 +408,7 @@ describe('options utils', () => {
 
     describe('OpenRouter provider', () => {
       const openrouterProvider: Provider = {
-        id: SystemProviderIds.openrouter,
+        id: 'openrouter',
         name: 'OpenRouter',
         type: 'openai',
         apiKey: 'test-key',
@@ -408,7 +419,7 @@ describe('options utils', () => {
       const openrouterModel: Model = {
         id: 'openai/gpt-4',
         name: 'GPT-4',
-        provider: SystemProviderIds.openrouter
+        provider: 'openrouter'
       } as Model
 
       it('should build basic OpenRouter options', () => {
@@ -446,7 +457,7 @@ describe('options utils', () => {
           mockAssistant,
           mockModel,
           {
-            id: SystemProviderIds.openai,
+            id: 'openai',
             name: 'OpenAI',
             type: 'openai',
             apiKey: 'test-key',
@@ -485,7 +496,7 @@ describe('options utils', () => {
           mockAssistant,
           mockModel,
           {
-            id: SystemProviderIds.gemini,
+            id: 'gemini',
             name: 'Google',
             type: 'gemini',
             apiKey: 'test-key',
@@ -529,7 +540,7 @@ describe('options utils', () => {
           mockAssistant,
           mockModel,
           {
-            id: SystemProviderIds.gemini,
+            id: 'gemini',
             name: 'Google',
             type: 'gemini',
             apiKey: 'test-key',
@@ -551,7 +562,7 @@ describe('options utils', () => {
 
     describe('Multiple capabilities', () => {
       const googleProvider = {
-        id: SystemProviderIds.gemini,
+        id: 'gemini',
         name: 'Google',
         type: 'gemini',
         apiKey: 'test-key',
@@ -563,7 +574,7 @@ describe('options utils', () => {
       const googleModel: Model = {
         id: 'gemini-2.0-flash-exp',
         name: 'Gemini 2.0 Flash',
-        provider: SystemProviderIds.gemini
+        provider: 'gemini'
       } as Model
 
       it('should combine reasoning and image generation', () => {
@@ -702,7 +713,7 @@ describe('options utils', () => {
 
     describe('AI Gateway provider', () => {
       const gatewayProvider: Provider = {
-        id: SystemProviderIds.gateway,
+        id: 'gateway',
         name: 'Vercel AI Gateway',
         type: 'gateway',
         apiKey: 'test-key',
@@ -714,7 +725,7 @@ describe('options utils', () => {
         const openaiModel: Model = {
           id: 'openai/gpt-4',
           name: 'GPT-4',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         const result = buildProviderOptions(mockAssistant, openaiModel, gatewayProvider, {
@@ -731,7 +742,7 @@ describe('options utils', () => {
         const anthropicModel: Model = {
           id: 'anthropic/claude-3-5-sonnet-20241022',
           name: 'Claude 3.5 Sonnet',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         const result = buildProviderOptions(mockAssistant, anthropicModel, gatewayProvider, {
@@ -748,7 +759,7 @@ describe('options utils', () => {
         const geminiModel: Model = {
           id: 'google/gemini-2.0-flash-exp',
           name: 'Gemini 2.0 Flash',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         const result = buildProviderOptions(mockAssistant, geminiModel, gatewayProvider, {
@@ -765,7 +776,7 @@ describe('options utils', () => {
         const grokModel: Model = {
           id: 'xai/grok-2-latest',
           name: 'Grok 2',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         const result = buildProviderOptions(mockAssistant, grokModel, gatewayProvider, {
@@ -782,7 +793,7 @@ describe('options utils', () => {
         const anthropicModel: Model = {
           id: 'anthropic/claude-3-5-sonnet-20241022',
           name: 'Claude 3.5 Sonnet',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         const result = buildProviderOptions(mockAssistant, anthropicModel, gatewayProvider, {
@@ -811,7 +822,7 @@ describe('options utils', () => {
         const anthropicModel: Model = {
           id: 'anthropic/claude-3-5-sonnet-20241022',
           name: 'Claude 3.5 Sonnet',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         const result = buildProviderOptions(mockAssistant, anthropicModel, gatewayProvider, {
@@ -841,7 +852,7 @@ describe('options utils', () => {
         const openaiModel: Model = {
           id: 'openai/gpt-4',
           name: 'GPT-4',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         const result = buildProviderOptions(mockAssistant, openaiModel, gatewayProvider, {
@@ -863,7 +874,7 @@ describe('options utils', () => {
         const unknownModel: Model = {
           id: 'unknown-provider/model-name',
           name: 'Unknown Model',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         const result = buildProviderOptions(mockAssistant, unknownModel, gatewayProvider, {
@@ -964,7 +975,7 @@ describe('options utils', () => {
         const { getCustomParameters } = await import('../reasoning')
 
         const geminiProvider = {
-          id: SystemProviderIds.gemini,
+          id: 'gemini',
           name: 'Google',
           type: 'gemini',
           apiKey: 'test-key',
@@ -975,7 +986,7 @@ describe('options utils', () => {
         const geminiModel: Model = {
           id: 'gemini-2.0-flash-exp',
           name: 'Gemini 2.0 Flash',
-          provider: SystemProviderIds.gemini
+          provider: 'gemini'
         } as Model
 
         // User provides custom parameters directly with AI SDK provider ID
@@ -1001,7 +1012,7 @@ describe('options utils', () => {
         const { getCustomParameters } = await import('../reasoning')
 
         const gatewayProvider: Provider = {
-          id: SystemProviderIds.gateway,
+          id: 'gateway',
           name: 'Vercel AI Gateway',
           type: 'gateway',
           apiKey: 'test-key',
@@ -1012,7 +1023,7 @@ describe('options utils', () => {
         const anthropicModel: Model = {
           id: 'anthropic/claude-3-5-sonnet-20241022',
           name: 'Claude 3.5 Sonnet',
-          provider: SystemProviderIds.gateway
+          provider: 'gateway'
         } as Model
 
         // User provides both gateway routing options and gateway-scoped custom parameters
@@ -1046,7 +1057,7 @@ describe('options utils', () => {
         const { getCustomParameters } = await import('../reasoning')
 
         const openaiProvider: Provider = {
-          id: SystemProviderIds.openai,
+          id: 'openai',
           name: 'OpenAI',
           type: 'openai-response',
           apiKey: 'test-key',
@@ -1122,7 +1133,7 @@ describe('options utils', () => {
         const { getCustomParameters } = await import('../reasoning')
 
         const openaiProvider: Provider = {
-          id: SystemProviderIds.openai,
+          id: 'openai',
           name: 'OpenAI',
           type: 'openai-response',
           apiKey: 'test-key',
