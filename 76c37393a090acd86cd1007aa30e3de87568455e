@@ -1,0 +1,23 @@
+src/renderer/src/services/TranslateService.ts
+  7d372131cf965f63 12,61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "76c37393a090acd86cd1007aa30e3de87568455e",
+  "prompts": {
+    "7d372131cf965f63": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "929d69f1-f717-44ca-ada8-19b029a45a18",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Michael Tan <tan.michael@mac.com>",
+      "messages": [],
+      "total_additions": 4,
+      "total_deletions": 7,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    }
+  }
+}
