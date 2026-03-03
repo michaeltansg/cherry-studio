@@ -388,13 +388,12 @@ export async function fetchMessagesSummary({
       await appendTrace({ topicId, traceId: messageWithTrace.traceId, model })
     }
 
-    const { getText, usage } = await AI.completions(model.id, llmMessages, {
+    const { getText } = await AI.completions(model.id, llmMessages, {
       ...middlewareConfig,
       assistant: summaryAssistant,
       topicId,
       callType: 'summary'
     })
-
 
     const text = getText()
     const result = removeSpecialCharactersForTopicName(text)
@@ -462,12 +461,11 @@ export async function fetchNoteSummary({ content, assistant }: { content: string
   }
 
   try {
-    const { getText, usage } = await AI.completions(model.id, llmMessages, {
+    const { getText } = await AI.completions(model.id, llmMessages, {
       ...middlewareConfig,
       assistant: summaryAssistant,
       callType: 'summary'
     })
-
 
     const text = getText()
     return removeSpecialCharactersForTopicName(text) || null
@@ -562,7 +560,6 @@ export async function fetchGenerate({
         callType: 'generate'
       }
     )
-
 
     return result.getText() || ''
   } catch (error: any) {
