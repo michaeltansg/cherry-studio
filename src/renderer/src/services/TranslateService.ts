@@ -13,7 +13,6 @@ import type { BlockCompleteChunk, Chunk } from '@renderer/types/chunk'
 import { ChunkType } from '@renderer/types/chunk'
 import { uuid } from '@renderer/utils'
 import { readyToAbort } from '@renderer/utils/abortController'
-import { trackTokenUsage } from '@renderer/utils/analytics'
 import { isAbortError } from '@renderer/utils/error'
 import { NoOutputGeneratedError } from 'ai'
 import { t } from 'i18next'
@@ -61,7 +60,6 @@ export const translateText = async (
       completed = true
     } else if (chunk.type === ChunkType.BLOCK_COMPLETE) {
       const usage = (chunk as BlockCompleteChunk).response?.usage
-      trackTokenUsage({ usage, model })
     } else if (chunk.type === ChunkType.ERROR) {
       error = chunk.error
       if (isAbortError(chunk.error)) {

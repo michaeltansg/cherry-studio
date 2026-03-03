@@ -4870,10 +4870,6 @@
         "title": "nível de detalhe"
       }
     },
-    "privacy": {
-      "enable_privacy_mode": "Enviar relatórios de erro e estatísticas de forma anônima",
-      "title": "Configurações de Privacidade"
-    },
     "provider": {
       "add": {
         "name": {
