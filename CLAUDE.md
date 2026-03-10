@@ -317,3 +317,7 @@ Do not introduce new features to these files. Bug fixes only.
 - URL sanitization via `strict-url-sanitise`
 - IP validation via `ipaddr.js` (API server)
 - `express-validator` for API server request validation
+
+### Rebase
+
+Add additional tests for new changes made in order to ensure no regression happens whenever we resolve a rebase conflict with upstream/main.
