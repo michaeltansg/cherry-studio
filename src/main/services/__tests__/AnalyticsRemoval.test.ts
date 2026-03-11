@@ -1,5 +1,6 @@
-import packageJson from '../../../../package.json'
 import { describe, expect, it } from 'vitest'
+
+import packageJson from '../../../../package.json'
 
 describe('analytics removal regression', () => {
   it('should not have @cherrystudio/analytics-client in package.json', () => {
@@ -12,6 +13,7 @@ describe('analytics removal regression', () => {
 
   it('should not be able to resolve AnalyticsService module', async () => {
     await expect(async () => {
+      // @ts-expect-error - Module intentionally removed; verifying it stays absent
       await import('@main/services/AnalyticsService')
     }).rejects.toThrow()
   })

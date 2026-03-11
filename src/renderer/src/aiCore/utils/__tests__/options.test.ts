@@ -1217,7 +1217,7 @@ describe('options utils', () => {
         const { getCustomParameters } = await import('../reasoning')
 
         const openaiProvider: Provider = {
-          id: SystemProviderIds.openai,
+          id: 'openai',
           name: 'OpenAI',
           type: 'openai-response',
           apiKey: 'test-key',
