@@ -49,13 +49,7 @@ import type {
   Provider,
   ToolCallResponse
 } from '@renderer/types'
-import {
-  EFFORT_RATIO,
-  FILE_TYPE,
-  isSystemProvider,
-  isTranslateAssistant,
-  WEB_SEARCH_SOURCE
-} from '@renderer/types'
+import { EFFORT_RATIO, FILE_TYPE, isSystemProvider, isTranslateAssistant, WEB_SEARCH_SOURCE } from '@renderer/types'
 import type { TextStartChunk, ThinkingStartChunk } from '@renderer/types/chunk'
 import { ChunkType } from '@renderer/types/chunk'
 import type { Message } from '@renderer/types/newMessage'

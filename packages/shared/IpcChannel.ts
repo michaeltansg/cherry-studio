@@ -425,6 +425,5 @@ export enum IpcChannel {
   OpenClaw_SyncConfig = 'openclaw:sync-config',
   OpenClaw_GetChannels = 'openclaw:get-channels',
   OpenClaw_CheckUpdate = 'openclaw:check-update',
-  OpenClaw_PerformUpdate = 'openclaw:perform-update',
-
+  OpenClaw_PerformUpdate = 'openclaw:perform-update'
 }
