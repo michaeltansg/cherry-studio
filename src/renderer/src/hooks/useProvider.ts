@@ -1,13 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { getDefaultProvider } from '@renderer/services/AssistantService'
 import { type RootState, useAppDispatch, useAppSelector } from '@renderer/store'
-import {
-  addModel,
-  removeModel,
-  updateModel,
-  updateProvider,
-  updateProviders
-} from '@renderer/store/llm'
+import { addModel, removeModel, updateModel, updateProvider, updateProviders } from '@renderer/store/llm'
 import type { Assistant, Model, Provider } from '@renderer/types'
 import { isSystemProvider } from '@renderer/types'
 import { withoutTrailingSlash } from '@renderer/utils/api'
@@ -29,9 +23,7 @@ function normalizeProvider<T extends Provider>(provider: T): T {
 const selectProviders = (state: RootState) => state.llm.providers
 
 const selectEnabledProviders = createSelector(selectProviders, (providers) =>
-  providers
-    .map(normalizeProvider)
-    .filter((p) => p.enabled)
+  providers.map(normalizeProvider).filter((p) => p.enabled)
 )
 
 const selectSystemProviders = createSelector(selectProviders, (providers) =>
@@ -44,9 +36,7 @@ const selectUserProviders = createSelector(selectProviders, (providers) =>
 
 const selectAllProviders = createSelector(selectProviders, (providers) => providers.map(normalizeProvider))
 
-const selectAllProvidersWithCherryAI = createSelector(selectProviders, (providers) =>
-  providers.map(normalizeProvider)
-)
+const selectAllProvidersWithCherryAI = createSelector(selectProviders, (providers) => providers.map(normalizeProvider))
 
 export function useProviders() {
   const providers: Provider[] = useAppSelector(selectEnabledProviders)
