@@ -1,12 +1,11 @@
-import { describe, expect, it } from 'vitest'
-
 import {
+  getProviderLogo,
   PROVIDER_LOGO_MAP,
   PROVIDER_URLS,
   SYSTEM_PROVIDERS,
-  SYSTEM_PROVIDERS_CONFIG,
-  getProviderLogo
+  SYSTEM_PROVIDERS_CONFIG
 } from '@renderer/config/providers'
+import { describe, expect, it } from 'vitest'
 
 describe('providers config', () => {
   describe('SYSTEM_PROVIDERS_CONFIG', () => {
