@@ -1,7 +1,15 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { getDefaultProvider } from '@renderer/services/AssistantService'
 import { type RootState, useAppDispatch, useAppSelector } from '@renderer/store'
-import { addModel, removeModel, updateModel, updateProvider, updateProviders } from '@renderer/store/llm'
+import {
+  addModel,
+  addProvider,
+  removeModel,
+  removeProvider,
+  updateModel,
+  updateProvider,
+  updateProviders
+} from '@renderer/store/llm'
 import type { Assistant, Model, Provider } from '@renderer/types'
 import { isSystemProvider } from '@renderer/types'
 import { withoutTrailingSlash } from '@renderer/utils/api'
@@ -45,7 +53,9 @@ export function useProviders() {
   return {
     providers: providers || [],
     updateProvider: (updates: Partial<Provider> & { id: string }) => dispatch(updateProvider(updates)),
-    updateProviders: (providers: Provider[]) => dispatch(updateProviders(providers))
+    updateProviders: (providers: Provider[]) => dispatch(updateProviders(providers)),
+    addProvider: (provider: Provider) => dispatch(addProvider(provider)),
+    removeProvider: (provider: Provider) => dispatch(removeProvider(provider))
   }
 }
 
