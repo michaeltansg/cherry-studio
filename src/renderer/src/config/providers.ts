@@ -65,7 +65,7 @@ import type { AtLeast, SystemProvider, SystemProviderId } from '@renderer/types'
 import { OpenAIServiceTiers } from '@renderer/types'
 
 import { TOKENFLUX_HOST } from './constant'
-import { qwen3Next80BModel, qwen38bModel, SYSTEM_MODELS } from './models'
+import { qwen3Next80BModel, qwen38bModel, SYSTEM_MODELS } from './models/default'
 
 export const CHERRYAI_PROVIDER: SystemProvider = {
   id: 'cherryai' as SystemProviderId,
@@ -813,7 +813,8 @@ export const PROVIDER_LOGO_MAP: AtLeast<SystemProviderId, string> = {
   sophnet: SophnetProviderLogo,
   gateway: AIGatewayProviderLogo,
   cerebras: CerebrasProviderLogo,
-  mimo: MiMoProviderLogo
+  mimo: MiMoProviderLogo,
+  codesmart: ''
 } as const
 
 export function getProviderLogo(providerId: string) {
