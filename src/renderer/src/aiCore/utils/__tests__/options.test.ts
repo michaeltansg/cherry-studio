@@ -447,7 +447,7 @@ describe('options utils', () => {
 
     describe('Poe provider', () => {
       const poeProvider: Provider = {
-        id: SystemProviderIds.poe,
+        id: 'poe',
         name: 'Poe',
         type: 'openai',
         apiKey: 'test-key',
@@ -458,7 +458,7 @@ describe('options utils', () => {
       const poeModel: Model = {
         id: 'openai/gpt-4',
         name: 'GPT-4',
-        provider: SystemProviderIds.poe
+        provider: 'poe'
       } as Model
 
       it('should deep merge Poe extra_body reasoning and web search parameters', async () => {
