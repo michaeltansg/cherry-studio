@@ -8,4 +8,6 @@
 !gh-create-pr
 !gh-pr-review
 !prepare-release
+!sync-upstream/
+!sync-upstream/**
 !vercel-react-best-practices
