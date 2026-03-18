@@ -1,0 +1,23 @@
+.claude/skills/.gitignore
+  2a6ed717b66f85e9 16-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.15",
+  "base_commit_sha": "15af41dd0300f5ba782b6016156a1591553daeec",
+  "prompts": {
+    "2a6ed717b66f85e9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f550dfa-6e30-4c69-a363-9ddc26cfaad6",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Michael Tan <tan.michael@mac.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 0,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
